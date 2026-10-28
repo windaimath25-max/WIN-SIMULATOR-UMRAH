@@ -318,6 +318,7 @@
     ['aktif','🏃','Sa\'i Shafa → Marwah','Tujuh lintasan bolak-balik','#9a3412,#fdba74'],
     ['aktif','🤲','Doa & Talbiyah','Labbaik Allahumma labbaik…','#6d28d9,#c4b5fd'],
     ['aktif','🎽','Niat Ihram di Miqat','Mulai berlaku larangan ihram','#374151,#e5e7eb'],
+    ['aktif','🛂','Kantor Imigrasi','Periksa paspor, visa umrah & sidik jari','#0f766e,#5eead4'],
     ['aktif','✈️','Keberangkatan & Bandara','Doa safar menuju Tanah Suci','#0369a1,#7dd3fc'],
     ['aktif','✂️','Tahallul','Mencukur / memendekkan rambut','#be185d,#f9a8d4'],
     ['aktif','🎓','Kepulangan & Sertifikat','Selesaikan perjalanan umrah Anda','#a16207,#fde047'],
@@ -579,7 +580,7 @@
     <div class="overflow-y-auto custom-scroll pr-1">
       <div class="px-2 pt-1 pb-2.5 border-b border-purple-400/15">
         <div class="text-[10px] font-bold tracking-widest uppercase text-purple-300/75" data-i18n="journeyProgress">PROGRES PERJALANAN</div>
-        <div id="left-step-counter" class="text-xs font-extrabold mt-0.5">4 / 9 LANGKAH</div>
+        <div id="left-step-counter" class="text-xs font-extrabold mt-0.5">5 / 10 LANGKAH</div>
       </div>
 
       <div id="step-list-container" class="mt-2.5 space-y-1">
@@ -676,8 +677,28 @@
         </p>
       </div>
 
+      <!-- PENJELASAN MIQAT (tanpa centang, hanya Langkah 4) -->
+      <div id="miqat-info-card" class="hidden space-y-2"></div>
+
+      <!-- CHECKLIST PERSIAPAN (hanya tampil di Langkah 1) -->
+      <div id="prep-checklist-card" class="hidden space-y-2">
+        <div class="hud-subcard p-3 rounded-xl">
+          <div class="flex items-center justify-between gap-2">
+            <div id="prep-title" class="text-[11px] font-bold uppercase tracking-wider text-amber-300">🧳 Checklist Bawaan Umrah</div>
+            <span id="prep-progress-text" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/30 text-purple-200">0/0</span>
+          </div>
+          <div class="h-1.5 rounded-full bg-black/30 mt-2 overflow-hidden"><div id="prep-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-amber-300 transition-all duration-300" style="width:0%"></div></div>
+          <div class="flex items-center justify-between mt-2 gap-2">
+            <p id="prep-intro" class="text-[10px] text-purple-200/75 leading-snug">Centang item yang sudah masuk koper. Tersimpan otomatis di perangkat ini.</p>
+            <button id="btn-prep-reset" type="button" class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-400/30 hover:bg-purple-500/20 transition">Reset</button>
+          </div>
+        </div>
+        <div id="prep-checklist-groups" class="space-y-1.5"></div>
+        <p id="prep-note" class="text-[10px] text-purple-300/70 leading-relaxed px-1">Ketentuan visa, vaksin, dan bagasi bisa berubah. Periksa kembali di Kemenag, Kemenkes, aplikasi Nusuk, serta maskapai dan travel Anda sebelum berangkat.</p>
+      </div>
+
       <!-- Counter & Quick Exploration Card -->
-      <div class="hud-subcard p-3 rounded-xl space-y-2.5">
+      <div id="counter-card" class="hud-subcard p-3 rounded-xl space-y-2.5">
         <div class="flex items-center justify-between">
           <div>
             <div id="counter-label" class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">PUTARAN</div>
@@ -1182,15 +1203,28 @@
         scene: 'mataf',
         counterLabel: 'PERSIAPAN',
         targetCount: 1,
-        subhint: 'Pelajari adab, niat ikhlas, dan perlengkapan ihram',
+        subhint: 'Centang perlengkapan & dokumen yang sudah siap dibawa',
         desc: 'Mempersiapkan fisik, ruhani, melunasi tanggungan, memohon maaf kepada keluarga, serta mempelajari tata cara manasik sesuai Sunnah.',
         missionTitle: 'PERSIAPAN MANASIK',
-        missionDesc: 'Periksa kesiapan pakaian Ihram dan pahami urutan rukun Umrah sebelum keberangkatan.',
+        missionDesc: 'Lengkapi daftar bawaan di atas (dokumen, ibadah, pakaian, obat, dan perlengkapan lain), lalu pahami urutan rukun Umrah sebelum berangkat.',
         actionLabel: 'Selesaikan Persiapan & Doa Safar',
         tips: 'Potong kuku, rapikan kumis/rambut, dan mandi sunnah sebelum mengenakan kain Ihram.'
       },
       {
         id: 2,
+        name: { id: 'Kantor Imigrasi', en: 'Immigration Office', ar: 'مكتب الجوازات' },
+        scene: 'mataf',
+        counterLabel: 'IMIGRASI',
+        targetCount: 1,
+        subhint: 'Siapkan paspor, visa umrah, dan tiket sebelum antre pemeriksaan',
+        desc: 'Pemeriksaan dokumen perjalanan di kantor imigrasi bandara: paspor (berlaku minimal 6 bulan), visa umrah, tiket pulang-pergi, dan bukti vaksin bila diperlukan. Petugas mengambil sidik jari dan foto wajah, lalu paspor dicap.',
+        missionTitle: 'PEMERIKSAAN IMIGRASI',
+        missionDesc: 'Lengkapi daftar dokumen di atas, antre dengan tertib, serahkan paspor dan visa umrah, ikuti arahan petugas untuk sidik jari dan foto, lalu terima paspor yang telah dicap.',
+        actionLabel: 'Selesaikan Pemeriksaan Imigrasi',
+        tips: 'Siapkan paspor, visa, tiket, dan alamat hotel dalam satu map. Jawab pertanyaan petugas dengan jujur dan tenang, serta jaga dzikir selama menunggu giliran.'
+      },
+      {
+        id: 3,
         name: { id: 'Keberangkatan & Bandara', en: 'Departure & Airport', ar: 'المغادرة والمطار' },
         scene: 'mataf',
         counterLabel: 'TAHAPAN',
@@ -1198,25 +1232,25 @@
         subhint: 'Membaca doa safar saat menaiki pesawat menuju Tanah Suci',
         desc: 'Keberangkatan menuju bandara internasional dan penerbangan melintasi Laut Merah menuju titik Miqat.',
         missionTitle: 'KEBERANGKATAN & SAFAR',
-        missionDesc: 'Lafalkan doa naik kendaraan dan bersiap mengenakan pakaian Ihram sebelum melewati batas Miqat.',
+        missionDesc: 'Lengkapi daftar di atas: doa berangkat, koper dan tas, serta dokumen penting. Lalu lafalkan doa naik kendaraan dan bersiap mengenakan pakaian Ihram sebelum melewati batas Miqat.',
         actionLabel: 'Baca Doa Safar & Menuju Miqat',
         tips: 'Perbanyak dzikir selama perjalanan di pesawat dan pantau pengumuman saat mendekati batas Miqat.'
       },
       {
-        id: 3,
+        id: 4,
         name: { id: 'Miqat', en: 'Miqat & Intention', ar: 'الميقات والإحرام' },
         scene: 'mataf',
         counterLabel: 'NIAT IHRAM',
         targetCount: 1,
         subhint: 'Labbaik Allahumma Umratan — Mulai berlaku larangan Ihram',
-        desc: 'Batas tempat memulai niat Ihram (Miqat Yalamlam / Bir Ali). Setelah berniat, jamaah memperbanyak bacaan Talbiyah.',
+        desc: 'Miqat ialah batas waktu dan tempat memulai ihram. Pilih lokasi (Makkah, Madinah, atau jalur udara) pada panel penjelasan, lalu centang amalan yang dilakukan di miqat.',
         missionTitle: 'NIAT IHRAM & TALBIYAH',
-        missionDesc: 'Lafalkan niat Umrah: "Labbaik Allahumma \'Umratan" dan kumandangkan kalimat Talbiyah.',
+        missionDesc: 'Lengkapi amalan di miqat pada daftar di atas (mandi, ihram, wudhu, shalat sunnah, niat), lalu lafalkan "Labbaik Allahumma \'Umratan" dan kumandangkan Talbiyah.',
         actionLabel: 'Lafalkan Niat Ihram & Talbiyah',
         tips: 'Labbaik Allahumma labbaik, labbaika laa syariika laka labbaik. Innal hamda wan-ni\'mata laka wal-mulk, laa syariika lak.'
       },
       {
-        id: 4,
+        id: 5,
         name: { id: 'Thawaf', en: 'Tawaf (7 Laps)', ar: 'الطواف' },
         scene: 'mataf',
         counterLabel: 'PUTARAN',
@@ -1229,7 +1263,7 @@
         tips: "Mulai tiap putaran sejajar Hajar Aswad: istilam dan ucapkan Bismillahi wallahu akbar. Antara Rukun Yamani dan Hajar Aswad baca Rabbana atina fid-dunya hasanah... (HR. Abu Dawud). Selebihnya tidak ada doa khusus per putaran: perbanyak dzikir dan doa bebas. Ka'bah selalu di sebelah kiri."
       },
       {
-        id: 5,
+        id: 6,
         name: { id: 'Shalat Sunnah & Air Zamzam', en: 'Sunnah Prayer & Zamzam', ar: 'صلاة السنة وماء زمزم' },
         scene: 'mataf',
         counterLabel: 'RAKAAT SHALAT',
@@ -1242,7 +1276,7 @@
         tips: "Saat mendekati Maqam baca QS. Al-Baqarah 125 (Wattakhidzu min maqami Ibrahima mushalla). Rakaat 1: Al-Kafirun, rakaat 2: Al-Ikhlas (HR. Muslim). Setelah itu minum Zamzam, lalu istilam Hajar Aswad sebelum ke Shafa."
       },
       {
-        id: 6,
+        id: 7,
         name: { id: 'Sa\'i', en: 'Sa\'i (Shafa - Marwah)', ar: 'السعي بين الصفا والمروة' },
         scene: 'masa',
         counterLabel: 'PERJALANAN SA\'I',
@@ -1255,7 +1289,7 @@
         tips: "Mendekati Shafa (sekali): Innash-shafa wal-marwata min sya'airillah, abda'u bima bada'allahu bih. Di atas Shafa dan Marwah: hadap Ka'bah, takbir 3x, tahlil, lalu berdoa (HR. Muslim). Tidak ada doa khusus tiap putaran."
       },
       {
-        id: 7,
+        id: 8,
         name: { id: 'Tahalul', en: 'Tahallul', ar: 'التحلل' },
         scene: 'masa',
         counterLabel: 'TAHALUL',
@@ -1268,7 +1302,7 @@
         tips: 'Rasulullah SAW mendoakan ampunan 3 kali bagi jamaah pria yang mencukur habis (halq) dan 1 kali bagi yang memendekkan (taqshir).'
       },
       {
-        id: 8,
+        id: 9,
         name: { id: 'Madinah - Ziarah', en: 'Madinah & Ziyarah', ar: 'المدينة المنورة والزيارة' },
         scene: 'mataf',
         counterLabel: 'ZIARAH',
@@ -1281,7 +1315,7 @@
         tips: 'Shalat di Masjid Nabawi lebih utama 1.000 kali dibanding shalat di masjid lain kecuali Masjidil Haram (100.000 kali).'
       },
       {
-        id: 9,
+        id: 10,
         name: { id: 'Kepulangan', en: 'Return & Certificate', ar: 'العودة والشهادة' },
         scene: 'mataf',
         counterLabel: 'SEMPURNA',
@@ -1313,8 +1347,8 @@
     ];
 
     const appState = {
-      currentStep: 4,
-      stepProgress: { 1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 },
+      currentStep: 5,
+      stepProgress: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0 },
       pilgrimName: 'Windu W.',
       journeyType: 'Umrah',
       hajjType: "Tamattu'",
@@ -1502,7 +1536,7 @@
     }
 
     function teleportToLevel(L) {
-      if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') selectStep(4);
+      if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') selectStep(5);
       playerState.level = L;
       playerState.y = LEVEL_Y[L];
       playerState.ramp = null;
@@ -2004,7 +2038,7 @@
         openDoaModal(['zamzam'], 'Tempat minum Zamzam');
       } else if (s.type === 'gate') {
         if (s.gate.masa) {
-          selectStep(6);
+          selectStep(7);
         } else {
           showRukunBanner(s.gate.name + ' — masuk dengan kaki kanan dan baca doa masuk masjid.');
           openDoaModal(['masuk_masjid', 'lihat_kabah'], s.gate.name);
@@ -2026,6 +2060,11 @@
         latin: 'Allāhu akbar (3×). Subḥānal-ladzī sakhkhara lanā hādzā wa mā kunnā lahū muqrinīn, wa innā ilā rabbinā lamunqalibūn. Allāhumma innā nas’aluka fī safarinā hādzal-birra wat-taqwā, wa minal-‘amali mā tardhā. Allāhumma hawwin ‘alainā safaranā hādzā waṭwi ‘annā bu‘dah. Allāhumma antash-shāḥibu fis-safar wal-khalīfatu fil-ahl.',
         arti: 'Mahasuci Allah yang menundukkan kendaraan ini bagi kami, padahal kami tidak mampu menguasainya, dan kepada Tuhan kamilah kami kembali. Ya Allah, kami memohon kebaikan dan takwa dalam perjalanan ini, serta amal yang Engkau ridai. Ya Allah, mudahkan perjalanan kami dan dekatkan jaraknya. Engkaulah teman dalam perjalanan dan pengganti (penjaga) bagi keluarga.',
         src: 'HR. Muslim no. 1342 (dari Ibnu Umar)' },
+      imigrasi: { group: 'Persiapan & Safar', title: 'Doa di kantor imigrasi / memasuki negeri baru', kind: 'Hadis sahih',
+        arab: 'اللَّهُمَّ رَبَّ السَّمَاوَاتِ السَّبْعِ وَمَا أَظْلَلْنَ، وَرَبَّ الْأَرَضِينَ وَمَا أَقْلَلْنَ، فَإِنَّا نَسْأَلُكَ خَيْرَ هَذِهِ الْبَلْدَةِ وَخَيْرَ أَهْلِهَا وَخَيْرَ مَا فِيهَا، وَنَعُوذُ بِكَ مِنْ شَرِّهَا وَشَرِّ أَهْلِهَا وَشَرِّ مَا فِيهَا',
+        latin: 'Allāhumma rabbas-samāwātis-sab‘i wa mā adhlalna, wa rabbal-aradhīna wa mā aqlalna, fa innā nas’aluka khaira hādzihil-baldati wa khaira ahlihā wa khaira mā fīhā, wa na‘ūdzu bika min syarrihā wa syarri ahlihā wa syarri mā fīhā.',
+        arti: 'Ya Allah, Tuhan tujuh langit dan apa yang dinaunginya, Tuhan tujuh bumi dan apa yang dipikulnya, kami memohon kepada-Mu kebaikan negeri ini, kebaikan penduduknya dan kebaikan yang ada di dalamnya, dan kami berlindung kepada-Mu dari keburukannya, keburukan penduduknya dan keburukan yang ada di dalamnya.',
+        src: 'HR. Al-Hakim; dihasankan sebagian ulama (doa memasuki suatu negeri)' },
       niat: { group: 'Miqat & Ihram', title: 'Niat ihram umrah', kind: 'Hadis sahih',
         arab: 'لَبَّيْكَ اللَّهُمَّ عُمْرَةً',
         latin: 'Labbaika Allāhumma ‘umratan.',
@@ -2166,9 +2205,10 @@
       const lvl = playerState.level | 0;
       const r = Math.hypot(x, z);
       if (st === 1) return { key: 'p1', place: 'Persiapan di rumah', short: 'Berangkat', ids: ['keluar_rumah'] };
-      if (st === 2) return { key: 'p2', place: 'Perjalanan menuju Tanah Suci', short: 'Safar', ids: ['safar'] };
-      if (st === 3) return { key: 'p3', place: 'Miqat — niat ihram', short: 'Talbiyah', ids: ['niat', 'talbiyah'] };
-      if (st === 4) {
+      if (st === 2) return { key: 'p_imi', place: 'Kantor Imigrasi', short: 'Imigrasi', ids: ['imigrasi'] };
+      if (st === 3) return { key: 'p2', place: 'Perjalanan menuju Tanah Suci', short: 'Safar', ids: ['safar'] };
+      if (st === 4) return { key: 'p3', place: 'Miqat — niat ihram', short: 'Talbiyah', ids: ['niat', 'talbiyah'] };
+      if (st === 5) {
         if (lvl > 0 || r > 38) return { key: 'm1', place: 'Memasuki / di dalam Masjidil Haram', short: 'Masuk Masjid', ids: ['masuk_masjid', 'lihat_kabah', 'keluar_masjid'] };
         const a = Math.atan2(z, x);
         const q = Math.PI / 4, tq = 3 * Math.PI / 4;
@@ -2178,16 +2218,16 @@
         if (Math.abs(a) < 0.3) return { key: 't_mz', place: 'Multazam & Pintu Ka’bah', short: 'Multazam', ids: ['multazam', 'dzikir_umum'] };
         return { key: 't_dz', place: 'Thawaf — berdzikir', short: 'Dzikir Thawaf', ids: ['dzikir_umum', 'antara_yamani_hajar'] };
       }
-      if (st === 5) return { key: 'p5', place: 'Maqam Ibrahim & Zamzam', short: 'Maqam/Zamzam', ids: ['maqam', 'shalat_thawaf', 'zamzam'], shalatBtn: true };
-      if (st === 6) {
-        const done = appState.stepProgress[6] || 0;
+      if (st === 6) return { key: 'p5', place: 'Maqam Ibrahim & Zamzam', short: 'Maqam/Zamzam', ids: ['maqam', 'shalat_thawaf', 'zamzam'], shalatBtn: true };
+      if (st === 7) {
+        const done = appState.stepProgress[7] || 0;
         if (z > 17) return { key: done === 0 ? 's_shafa0' : 's_shafa', place: 'Bukit Shafa', short: 'Shafa', ids: done === 0 ? ['sebelum_sai', 'shafa'] : ['shafa'] };
         if (z < -17) return { key: 's_marwah', place: 'Bukit Marwah', short: 'Marwah', ids: ['marwah'] };
         if (Math.abs(z) < SAI_GREEN_Z) return { key: 's_hijau', place: 'Di antara dua tanda hijau', short: 'Lampu Hijau', ids: ['masa_hijau', 'sai_jalan'] };
         return { key: 's_jalan', place: 'Berjalan di Mas’a', short: 'Sa’i', ids: ['sai_jalan', 'masa_hijau'] };
       }
-      if (st === 7) return { key: 'p7', place: 'Tahalul di Marwah', short: 'Tahalul', ids: ['tahalul'] };
-      if (st === 8) return { key: 'p8', place: 'Masjid (ziarah)', short: 'Masjid', ids: ['masuk_masjid', 'keluar_masjid'] };
+      if (st === 8) return { key: 'p7', place: 'Tahalul di Marwah', short: 'Tahalul', ids: ['tahalul'] };
+      if (st === 9) return { key: 'p8', place: 'Masjid (ziarah)', short: 'Masjid', ids: ['masuk_masjid', 'keluar_masjid'] };
       return { key: 'p9', place: 'Penutup & kepulangan', short: 'Wada’', ids: ['wada', 'keluar_masjid', 'pulang'] };
     }
 
@@ -5163,7 +5203,7 @@ window.__royalEnv={env:envRC,gates:GG};
 
     function focusOnKabahPart(part) {
       if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') {
-        selectStep(4);
+        selectStep(5);
       }
       appState.autoWalk = false;
       updateAutoWalkButtonUI();
@@ -5854,8 +5894,8 @@ window.__royalEnv={env:envRC,gates:GG};
     function saiArrive() {
       playerState.saiDirection *= -1;
       incrementCurrentStepCount();
-      const target = STEPS_DATA[5].targetCount;
-      const done = (appState.stepProgress[6] || 0) >= target;
+      const target = STEPS_DATA[6].targetCount;
+      const done = (appState.stepProgress[7] || 0) >= target;
       const atShafa = playerState.saiDirection === 1;
       if (done) {
         appState.autoWalk = false;
@@ -5871,7 +5911,7 @@ window.__royalEnv={env:envRC,gates:GG};
     }
 
     function saiCheckArrival() {
-      if ((appState.stepProgress[6] || 0) >= STEPS_DATA[5].targetCount) return;
+      if ((appState.stepProgress[7] || 0) >= STEPS_DATA[6].targetCount) return;
       const d = playerState.saiDirection, z = playerState.z;
       if ((d === 1 && z <= -(HILL_STOP_Z - 0.4)) || (d === -1 && z >= (HILL_STOP_Z - 0.4))) saiArrive();
     }
@@ -5959,7 +5999,7 @@ window.__royalEnv={env:envRC,gates:GG};
             playerState.level = 0;
             playerState.y = 0;
           }
-          if (appState.currentStep === 5) {
+          if (appState.currentStep === 6) {
             const tx = 13.7, tz = 0.05;
             const dx = tx - playerState.x;
             const dz = tz - playerState.z;
@@ -5987,7 +6027,7 @@ window.__royalEnv={env:envRC,gates:GG};
             playerState.x = nx;
             playerState.z = nz;
           }
-        } else if (appState.currentStep !== 6) {
+        } else if (appState.currentStep !== 7) {
           appState.autoWalk = false;
           updateAutoWalkButtonUI();
         } else {
@@ -6071,7 +6111,7 @@ window.__royalEnv={env:envRC,gates:GG};
       }
 
       // Peringatan arah thawaf (harus berlawanan arah jarum jam / Ka'bah di kiri)
-      if (!inMasa && moving && appState.currentStep === 4 && playerState.level === 0) {
+      if (!inMasa && moving && appState.currentStep === 5 && playerState.level === 0) {
         const r2 = ox * ox + oz * oz;
         if (r2 > 49 && r2 < 1225) {
           const cross = (ox * (playerState.z - oz) - oz * (playerState.x - ox)) / r2;
@@ -6087,7 +6127,7 @@ window.__royalEnv={env:envRC,gates:GG};
         const bd = beltDirAt(playerState.x, playerState.z);
         playerOnBelt = bd;
         if (bd !== 0) playerState.z += bd * BELT_SPEED * dt; // sabuk membawa sampai ujung eskalator
-        if (appState.currentStep === 6) saiCheckArrival();
+        if (appState.currentStep === 7) saiCheckArrival();
       } else {
         playerOnBelt = 0;
       }
@@ -6095,13 +6135,13 @@ window.__royalEnv={env:envRC,gates:GG};
       // ===================== MODEL PEMAIN =====================
       // --- Istilam: di garis hijau Hajar Aswad karakter menghadap Ka'bah & mengangkat tangan kanan ---
       const _px = playerState.x, _pz = playerState.z, _pr = Math.hypot(_px, _pz);
-      const onGreenLine = !inMasa && appState.currentStep === 4 && ((playerState.level | 0) === 0) &&
+      const onGreenLine = !inMasa && appState.currentStep === 5 && ((playerState.level | 0) === 0) &&
         playerState.pose === 'stand' && _px > 0 && _pz > 0 && Math.abs(_px - _pz) / Math.SQRT2 < 1.0 && _pr > 4.5 && _pr < 28;
       {
         const tgt = onGreenLine ? 1 : 0;
         playerState.istilam += (tgt - playerState.istilam) * Math.min(1, dt * (tgt ? 6 : 2.5));
         if (playerState.istilam < 0.002) playerState.istilam = 0;
-        const inTawafZone = !inMasa && appState.currentStep === 4 && ((playerState.level | 0) === 0) && _pr < 30;
+        const inTawafZone = !inMasa && appState.currentStep === 5 && ((playerState.level | 0) === 0) && _pr < 30;
         playerState.tawafFocus += ((inTawafZone ? 1 : 0) - playerState.tawafFocus) * Math.min(1, dt * 2.5);
       }
       const istB = playerState.istilam;
@@ -6274,7 +6314,7 @@ window.__royalEnv={env:envRC,gates:GG};
           if (delta < -Math.PI) delta += Math.PI * 2;
           if (delta > 0 && Math.abs(delta) < 0.5) {
             playerState.cumulativeAngle += delta;
-            if (playerState.cumulativeAngle >= Math.PI * 1.92 && appState.currentStep === 4) {
+            if (playerState.cumulativeAngle >= Math.PI * 1.92 && appState.currentStep === 5) {
               playerState.cumulativeAngle = 0;
               incrementCurrentStepCount();
             }
@@ -6466,6 +6506,377 @@ window.__royalEnv={env:envRC,gates:GG};
     }
 
     
+
+    // =========================================================================
+    // CHECKLIST PANEL KANAN (LANGKAH 1 PERSIAPAN, LANGKAH 2 IMIGRASI)
+    // g: 'm' = khusus laki-laki, 'f' = khusus perempuan, tanpa g = semua jamaah
+    // =========================================================================
+    const PREP_GROUPS_STEP1 = [
+      { id: 'dok', icon: '📄', title: 'Dokumen Perjalanan', items: [
+        { id: 'dok1', t: 'Paspor (masa berlaku minimal 6 bulan sebelum keberangkatan)' },
+        { id: 'dok2', t: 'Visa umrah / e-visa yang sudah terbit' },
+        { id: 'dok3', t: 'Tiket pesawat pulang-pergi dan bukti pemesanan hotel Makkah & Madinah' },
+        { id: 'dok4', t: 'Sertifikat vaksin meningitis (ICV) dan vaksin lain sesuai ketentuan terbaru; vaksin dianjurkan minimal 10 hari sebelum berangkat' },
+        { id: 'dok5', t: 'KTP, Kartu Keluarga, dan pas foto berlatar putih' },
+        { id: 'dok6', t: 'Asuransi perjalanan / kartu BPJS' },
+        { id: 'dok7', t: 'Fotokopi dan foto digital semua dokumen (simpan terpisah dari aslinya)' },
+        { id: 'dok8', t: 'Kartu identitas jamaah dari travel, nomor ketua rombongan, dan alamat hotel' }
+      ]},
+      { id: 'ibd', icon: '🕋', title: 'Perlengkapan Ibadah', items: [
+        { id: 'ibd1', g: 'm', t: 'Kain ihram (minimal 2 pasang) beserta sabuk ihram' },
+        { id: 'ibd2', g: 'f', t: 'Mukena ringan yang mudah dilipat' },
+        { id: 'ibd3', t: 'Sajadah travel' },
+        { id: 'ibd4', t: 'Sarung atau celana panjang longgar yang nyaman untuk harian' },
+        { id: 'ibd5', t: 'Al-Qur’an saku dan buku doa / panduan manasik umrah' },
+        { id: 'ibd6', t: 'Tasbih atau penghitung putaran (tasbih digital)' },
+        { id: 'ibd7', g: 'm', t: 'Gunting kecil untuk tahalul (simpan di koper bagasi, bukan di kabin)' }
+      ]},
+      { id: 'pak', icon: '👕', title: 'Pakaian Sehari-hari', items: [
+        { id: 'pak1', t: 'Pakaian ganti secukupnya (misal 5–7 setel untuk 9 hari; biasanya ada laundry)' },
+        { id: 'pak2', t: 'Pakaian dalam dan kaus kaki (bawa lebih banyak)' },
+        { id: 'pak3', t: 'Jaket tebal / cardigan / pashmina (malam hari dan AC masjid bisa dingin)' },
+        { id: 'pak4', t: 'Kaus kaki wudhu atau kaus kaki nyaman untuk berjalan jauh' },
+        { id: 'pak5', g: 'f', t: 'Jilbab / kerudung cadangan, manset, dan kaus kaki panjang' },
+        { id: 'pak6', t: 'Kantong kain untuk pakaian kotor' }
+      ]},
+      { id: 'alas', icon: '👟', title: 'Alas Kaki', items: [
+        { id: 'alas1', t: 'Sandal nyaman dan anti-slip (jarak ke masjid cukup jauh)' },
+        { id: 'alas2', t: 'Kantong / pouch sandal untuk dibawa masuk Masjidil Haram dan Masjid Nabawi' },
+        { id: 'alas3', t: 'Sandal / sepatu cadangan yang sudah biasa dipakai' }
+      ]},
+      { id: 'mandi', icon: '🧴', title: 'Perlengkapan Mandi (Ukuran Travel)', items: [
+        { id: 'mandi1', t: 'Sabun, sampo, sikat gigi, pasta gigi (pilih yang tanpa pewangi saat berihram)' },
+        { id: 'mandi2', t: 'Pelembap kulit, lip balm, dan vaseline (cuaca kering)' },
+        { id: 'mandi3', t: 'Handuk kecil cepat kering' },
+        { id: 'mandi4', t: 'Gunting kuku, sisir, dan deodoran tanpa pewangi' },
+        { id: 'mandi5', t: 'Tabir surya tanpa pewangi' }
+      ]},
+      { id: 'obat', icon: '💊', title: 'Obat Pribadi & Health Kit', items: [
+        { id: 'obat1', t: 'Obat resep dokter yang rutin dikonsumsi (bawa resep / surat dokter)' },
+        { id: 'obat2', t: 'Obat umum: pereda nyeri/parasetamol, obat diare, obat masuk angin, vitamin/suplemen' },
+        { id: 'obat3', t: 'Salep/olesan pegal-pegal dan plester (pilih tanpa wewangian saat berihram)' },
+        { id: 'obat4', t: 'Masker serta tisu basah dan kering' },
+        { id: 'obat5', t: 'Hand sanitizer, oralit / elektrolit, dan obat flu-batuk' },
+        { id: 'obat6', t: 'Obat tetes mata dan kacamata cadangan bila diperlukan' }
+      ]},
+      { id: 'duit', icon: '💳', title: 'Uang & Elektronik', items: [
+        { id: 'duit1', t: 'Uang Riyal tunai secukupnya dan kartu debit/kredit yang bisa dipakai di luar negeri' },
+        { id: 'duit2', t: 'Tas selempang / tas pinggang anti-copet untuk dokumen dan uang' },
+        { id: 'duit3', t: 'Ponsel, charger, dan power bank (power bank wajib di tas kabin)' },
+        { id: 'duit4', t: 'Adaptor colokan listrik (Arab Saudi memakai tipe G) dan kabel ekstensi' },
+        { id: 'duit5', t: 'SIM card / eSIM roaming dan aplikasi Nusuk terpasang' }
+      ]},
+      { id: 'prak', icon: '🎒', title: 'Perlengkapan Praktis', items: [
+        { id: 'prak1', t: 'Tas ransel kecil untuk dibawa harian ke masjid' },
+        { id: 'prak2', t: 'Botol minum isi ulang' },
+        { id: 'prak3', t: 'Payung lipat, topi, dan kacamata hitam (di luar ihram)' },
+        { id: 'prak4', t: 'Gembok koper, tag nama koper, dan pita / penanda warna agar mudah dikenali' },
+        { id: 'prak5', t: 'Kantong plastik / ziplock dan tas lipat tambahan untuk oleh-oleh' },
+        { id: 'prak6', t: 'Pulpen dan buku catatan kecil (nomor darurat, nomor kamar hotel)' }
+      ]}
+    ];
+    const PREP_GROUPS_STEP2 = [
+      { id: 'imd', icon: '🛂', title: 'Dokumen Asli yang Dibawa', items: [
+        { id: 'imd1', t: 'Paspor asli (masa berlaku minimal 6 bulan sejak tanggal berangkat, kondisi tidak rusak)' },
+        { id: 'imd2', t: 'Visa umrah resmi (terbit lewat Nusuk / penyelenggara resmi)' },
+        { id: 'imd5', t: 'Sertifikat vaksin (meningitis dan lainnya sesuai ketentuan) serta surat keterangan sehat bila diminta' },
+        { id: 'imd6', t: 'KTP dan Kartu Keluarga asli' },
+        { id: 'imd7', t: 'Kartu identitas jamaah / voucher dari travel atau penyelenggara' }
+      ]},
+      { id: 'imf', icon: '🖨️', title: 'Fotokopi & Salinan', items: [
+        { id: 'imf1', t: 'Fotokopi paspor (halaman data) — 3 lembar' },
+        { id: 'imf2', t: 'Fotokopi visa umrah — 3 lembar' },
+        { id: 'imf6', t: 'Foto digital semua dokumen di ponsel dan penyimpanan cloud' }
+      ]},
+      { id: 'imp', icon: '📘', title: 'Jika Paspor Belum Ada / Habis Masa Berlaku', items: [
+        { id: 'imp1', t: 'Daftar antrean lewat aplikasi M-Paspor dan simpan bukti antreannya' },
+        { id: 'imp2', t: 'KTP dan Kartu Keluarga asli (syarat permohonan paspor)' },
+        { id: 'imp3', t: 'Dokumen kewarganegaraan: akta kelahiran / ijazah / buku nikah (salah satu, sesuai ketentuan imigrasi)' },
+        { id: 'imp4', t: 'Paspor lama (bila perpanjangan / penggantian)' },
+        { id: 'imp5', t: 'Bukti pembayaran biaya paspor (PNBP)' },
+        { id: 'imp6', t: 'Siap wawancara singkat, foto, dan perekaman sidik jari di kantor imigrasi' }
+      ]},
+      { id: 'imk', icon: '🧾', title: 'Saat Pemeriksaan di Konter', items: [
+        { id: 'imk1', t: 'Datang lebih awal ke bandara agar tidak terburu-buru saat antre' },
+        { id: 'imk2', t: 'Pastikan nama di paspor, visa, dan tiket sama persis' },
+        { id: 'imk3', t: 'Simpan semua dokumen dalam satu map yang mudah dijangkau' },
+        { id: 'imk4', t: 'Hafal alamat hotel, nama travel / penyelenggara, dan lama perjalanan untuk pertanyaan petugas' },
+        { id: 'imk5', t: 'Siap foto wajah dan sidik jari (lepas masker, topi, atau kacamata bila diminta)' },
+        { id: 'imk6', t: 'Periksa paspor sudah dicap tanda keluar sebelum meninggalkan konter' }
+      ]}
+    ];
+    const PREP_CONFIG = {
+      1: { title: '🧳 Checklist Bawaan Umrah', groups: PREP_GROUPS_STEP1, open: 'dok',
+           intro: 'Centang item yang sudah masuk koper. Tersimpan otomatis di perangkat ini.',
+           note: 'Ketentuan visa, vaksin, dan bagasi bisa berubah. Periksa kembali di Kemenag, Kemenkes, aplikasi Nusuk, serta maskapai dan travel Anda sebelum berangkat.',
+           done: 'Alhamdulillah, semua perlengkapan sudah siap dibawa!', todo: 'Lengkapi dulu agar tidak ada yang tertinggal.' },
+      2: { title: '🛂 Checklist Kantor Imigrasi', groups: PREP_GROUPS_STEP2, open: 'imd',
+           intro: 'Centang dokumen yang sudah diurus dan siap ditunjukkan ke petugas imigrasi.',
+           note: 'Syarat dokumen dan alur pemeriksaan bisa berubah. Pastikan kembali di situs imigrasi.go.id, Kemenag, aplikasi Nusuk, atau penyelenggara umrah Anda.',
+           done: 'Alhamdulillah, dokumen imigrasi sudah lengkap!', todo: 'Lengkapi dulu agar lancar saat pemeriksaan.' }
+    };
+    const PREP_GROUPS_STEP3 = [
+      { id: 'bdo', icon: '🤲', title: 'Doa & Persiapan Hati', items: [
+        { id: 'bdo1', t: 'Berpamitan, meminta maaf, dan memohon doa restu keluarga' },
+        { id: 'bdo2', t: 'Menyelesaikan urusan utang-piutang dan menitipkan urusan rumah / pekerjaan' },
+        { id: 'bdo3', t: 'Berwudu dan meluruskan niat ikhlas karena Allah' },
+        { id: 'bdo4', t: 'Membaca doa keluar rumah' },
+        { id: 'bdo5', t: 'Membaca doa naik kendaraan saat masuk mobil / bus menuju bandara' },
+        { id: 'bdo6', t: 'Membaca doa safar saat pesawat akan lepas landas' }
+      ]},
+      { id: 'bdk', icon: '🛂', title: 'Dokumen Penting (Simpan di Tas Kabin)', items: [
+        { id: 'bdk1', t: 'Paspor asli' },
+        { id: 'bdk2', t: 'Visa umrah' },
+        { id: 'bdk3', t: 'Tiket pesawat (e-ticket) dan boarding pass' },
+        { id: 'bdk4', t: 'KTP' },
+        { id: 'bdk5', t: 'Sertifikat vaksin dan surat keterangan sehat bila diminta' },
+        { id: 'bdk6', t: 'Kartu identitas jamaah, nomor ketua rombongan, dan kontak darurat keluarga' },
+        { id: 'bdk7', t: 'Asuransi perjalanan dan fotokopi dokumen (simpan terpisah dari aslinya)' },
+        { id: 'bdk8', t: 'Uang Riyal dan kartu debit/kredit di tas selempang atau tas pinggang' }
+      ]},
+      { id: 'bko', icon: '🧳', title: 'Koper & Tas', items: [
+        { id: 'bko1', t: 'Hitung jumlah koper dan tas; pastikan semuanya terbawa dan tidak ada yang tertinggal' },
+        { id: 'bko2', t: 'Timbang koper di rumah agar tidak melebihi jatah bagasi maskapai' },
+        { id: 'bko3', t: 'Beri tag nama, alamat, dan nomor HP, serta penanda warna agar mudah dikenali' },
+        { id: 'bko4', t: 'Kunci koper dengan gembok dan foto koper sebagai bukti bila hilang' },
+        { id: 'bko5', t: 'Tas kabin tidak melebihi batas berat dan ukuran maskapai (biasanya 7–10 kg)' },
+        { id: 'bko6', t: 'Isi tas kabin: dokumen, uang, obat rutin, ponsel, power bank, dan satu setel pakaian ganti' },
+        { id: 'bko7', g: 'm', t: 'Kain ihram dan sabuk ihram di tas kabin (dipakai menjelang Miqat)' },
+        { id: 'bko8', g: 'f', t: 'Pakaian ihram wanita (gamis longgar dan kerudung) di tas kabin' }
+      ]},
+      { id: 'bbt', icon: '🚫', title: 'Aturan Barang di Kabin & Bagasi', items: [
+        { id: 'bbt1', t: 'Benda tajam (gunting, pisau cukur, silet) ditaruh di koper bagasi, bukan di tas kabin' },
+        { id: 'bbt2', t: 'Cairan, gel, dan aerosol di kabin: maksimal 100 ml per wadah, total 1 liter dalam satu kantong plastik bening' },
+        { id: 'bbt3', t: 'Cairan lebih dari 100 ml (sampo, pasta gigi besar, minyak gosok, parfum) masuk koper bagasi' },
+        { id: 'bbt4', t: 'Power bank di tas kabin, bukan bagasi; kapasitas maksimal 100 Wh (100–160 Wh perlu izin maskapai)' },
+        { id: 'bbt5', t: 'Tidak membawa korek gas, benda mudah terbakar, atau semprotan aerosol besar ke kabin' },
+        { id: 'bbt6', t: 'Payung dan rol kabel: masukkan ke bagasi dan cek ketentuan maskapai' }
+      ]},
+      { id: 'bbd', icon: '🛫', title: 'Proses di Bandara', items: [
+        { id: 'bbd1', t: 'Tiba di bandara paling lambat 3 jam sebelum penerbangan internasional' },
+        { id: 'bbd2', t: 'Berkumpul dengan rombongan dan ketua rombongan, lalu hitung anggota' },
+        { id: 'bbd3', t: 'Check-in dan serahkan bagasi; simpan tanda terima bagasi (claim tag)' },
+        { id: 'bbd4', t: 'Lewati pemeriksaan keamanan (keluarkan cairan dan elektronik, lepas ikat pinggang bila diminta)' },
+        { id: 'bbd5', t: 'Cek nomor gate dan jam boarding di layar informasi' },
+        { id: 'bbd6', t: 'Berwudu, salat, dan ke toilet sebelum naik pesawat' }
+      ]},
+      { id: 'bps', icon: '✈️', title: 'Di Dalam Pesawat', items: [
+        { id: 'bps1', t: 'Pasang sabuk pengaman dan aktifkan mode pesawat di ponsel' },
+        { id: 'bps2', t: 'Perbanyak dzikir, doa, dan istigfar selama penerbangan' },
+        { id: 'bps3', t: 'Minum cukup, istirahat, dan sesekali gerakkan kaki selama penerbangan panjang' },
+        { id: 'bps4', t: 'Pantau pengumuman pilot dan pembimbing mengenai posisi Miqat' }
+      ]}
+    ];
+    PREP_CONFIG[3] = {
+      title: '✈️ Checklist Keberangkatan & Bandara', groups: PREP_GROUPS_STEP3, open: 'bdo',
+      intro: 'Centang setiap hal yang sudah dilakukan atau disiapkan sebelum dan saat keberangkatan.',
+      note: 'Aturan bagasi dan jam check-in berbeda tiap maskapai dan bandara. Periksa kembali ketentuan maskapai serta arahan travel Anda.',
+      done: 'Alhamdulillah, semua persiapan keberangkatan sudah beres!', todo: 'Lengkapi dulu agar tidak ada yang tertinggal di bandara.'
+    };
+    // =========================================================================
+    // LANGKAH 4 MIQAT: panel penjelasan (tanpa centang) + checklist amalan di miqat
+    // =========================================================================
+    const MQ_LOK = {
+      makkah: { label: '🕋 Makkah',
+        intro: 'Bagi yang sudah berada di Makkah (mis. umrah sunnah), ihram umrah dimulai dari luar batas Tanah Haram, sehingga jamaah keluar kota dahulu. Masjid yang lazim dipakai:',
+        items: [
+          ['Masjid Tan’im (Masjid Aisyah)', 'مسجد التنعيم', '± 7,5 km dari Masjidil Haram, arah utara', 'Paling dekat dan paling ramai dipakai jamaah Indonesia. Dasarnya: Nabi ﷺ menyuruh Abdurrahman bin Abu Bakar mengantar Aisyah r.a. berumrah dari Tan’im (HR. Al-Bukhari & Muslim).'],
+          ['Masjid Ji’ranah', 'مسجد الجعرانة', '± 14 km, arah Thaif', 'Nabi ﷺ pernah berihram umrah dari Ji’ranah (HR. Abu Dawud & At-Tirmidzi). Masjidnya luas.'],
+          ['Masjid Hudaibiyah', 'مسجد الحديبية', '± 16–25 km, di jalur Makkah–Jeddah', 'Kawasan Perjanjian Hudaibiyah. Jarak berbeda antarsumber.']],
+        warn: 'Ketiganya bukan lima miqat makani, melainkan titik ihram umrah terdekat (adnal hill) bagi yang sudah di Makkah. Jamaah yang baru datang dari luar negeri berihram di miqat jalurnya (tab Madinah atau Miqat Lain).' },
+      madinah: { label: '🕌 Madinah',
+        intro: 'Jamaah yang ziarah ke Madinah dahulu lalu menuju Makkah berihram di:',
+        items: [
+          ['Masjid Dzulhulaifah (Bir Ali)', 'مسجد ذي الحليفة', '± 450 km dari Makkah, arah utara', 'Juga dikenal sebagai Abyar Ali dan Masjid Asy-Syajarah. Miqat penduduk Madinah dan siapa pun yang lewat Madinah, termasuk jamaah Indonesia gelombang 1. Ada tempat wudhu, kamar mandi, dan ruang ganti. Nabi ﷺ berihram dari sini (HR. Al-Bukhari & Muslim).']],
+        warn: 'Di wilayah Madinah hanya ada satu masjid miqat ini. Berihramlah di sini sebelum bus meninggalkan masjid.' },
+      lain: { label: '✈️ Miqat Lain',
+        intro: 'Miqat makani lain yang ditetapkan Nabi ﷺ, dan cara jamaah Indonesia yang terbang langsung ke Jeddah:',
+        items: [
+          ['Juhfah / Rabigh', 'الجحفة', '± 187 km, barat laut Makkah', 'Miqat jamaah Syam, Mesir, Maghrib. Kini jamaah berihram dari Rabigh, yang berada sebelum garis Juhfah.'],
+          ['Qarnul Manazil (As-Sail Al-Kabir)', 'قرن المنازل', '± 80 km, timur Makkah, utara Thaif', 'Miqat jamaah Najd, Teluk, dan Iran. Jadi titik sejajar di udara bagi jamaah Indonesia.'],
+          ['Yalamlam (Masjid As-Sa’diyah)', 'يلملم', '± 90–130 km, selatan Makkah', 'Miqat jamaah Yaman dan Asia Selatan/Timur. Rute laut dan udara Indonesia sejajar dengan Yalamlam.'],
+          ['Dzatu ‘Irq', 'ذات عرق', '± 90–94 km, timur laut Makkah', 'Miqat jamaah Irak dan sekitarnya.'],
+          ['Jalur udara Indonesia', '', 'Pesawat langsung ke Jeddah', 'Niat di embarkasi atau di pesawat saat sejajar Qarnul Manazil/Yalamlam, atas aba-aba ketua kloter atau awak kabin. MUI juga membolehkan di Bandara King Abdul Aziz Jeddah, sedangkan ulama Saudi menegaskan Jeddah bukan miqat sehingga ihram tidak boleh ditunda sampai mendarat. Ikuti arahan pembimbing.']],
+        warn: 'Jarak bersifat perkiraan dan berbeda antarsumber.' }
+    };
+    const PREP_GROUPS_STEP4 = [
+      { id: 'mqa', icon: '🧼', title: 'Sebelum Berihram', items: [
+        { id: 'mqa1', t: 'Mandi sunnah ihram (wanita haid/nifas pun dianjurkan mandi)' },
+        { id: 'mqa2', t: 'Rapikan diri sebelum niat: potong kuku, rapikan kumis, bersihkan bulu ketiak dan kemaluan (setelah ihram dilarang)' },
+        { id: 'mqa3', t: 'Memakai wewangian pada badan (bukan pada kain ihram) sebelum niat, bila diinginkan; wanita yang tidak mencolok' },
+        { id: 'mqa4', t: 'Buang hajat dan pastikan badan bersih sebelum memakai ihram' }
+      ]},
+      { id: 'mqb', icon: '👕', title: 'Mengenakan Pakaian Ihram', items: [
+        { id: 'mqb1', g: 'm', t: 'Memakai izar (kain bawah) dan rida’ (kain atas) putih bersih, tanpa pakaian berjahit yang membentuk badan' },
+        { id: 'mqb2', g: 'm', t: 'Kedua bahu tertutup rida’ dan kepala terbuka (membuka bahu kanan / idhtiba’ baru dilakukan saat thawaf)' },
+        { id: 'mqb3', g: 'm', t: 'Memakai sandal terbuka yang tidak menutup mata kaki; sabuk ihram untuk dompet dan dokumen' },
+        { id: 'mqb4', g: 'f', t: 'Memakai pakaian biasa yang menutup aurat (tidak ada warna khusus); wajah dan telapak tangan terbuka, tanpa cadar dan sarung tangan' }
+      ]},
+      { id: 'mqc', icon: '🤲', title: 'Wudhu & Shalat Sunnah', items: [
+        { id: 'mqc1', t: 'Berwudhu dengan sempurna' },
+        { id: 'mqc2', t: 'Shalat tahiyyatul masjid bila berihram di masjid miqat' },
+        { id: 'mqc3', t: 'Shalat sunnah ihram 2 rakaat, atau berihram sesudah shalat fardhu bila bertepatan waktunya; di pesawat dapat dikerjakan setibanya di bandara sesuai arahan petugas' }
+      ]},
+      { id: 'mqd', icon: '💭', title: 'Niat Ihram', items: [
+        { id: 'mqd1', t: 'Meluruskan niat umrah ikhlas karena Allah di dalam hati' },
+        { id: 'mqd2', t: 'Niat untuk diri sendiri: Labbaika Allāhumma ‘umratan (umrah pertama untuk diri sendiri)' },
+        { id: 'mqd3', t: 'Niat badal untuk orang lain (opsional): Labbaika Allāhumma ‘umratan ‘an … (sebut nama); setelah umrah sendiri, satu orang per umrah' },
+        { id: 'mqd4', t: 'Bila khawatir terhalang (sakit dll.), menambahkan syarat ihram: Allāhumma maḥillī ḥaitsu ḥabastanī' },
+        { id: 'mqd5', g: 'f', t: 'Bila sedang haid/nifas: tetap berniat dan berihram, tunda thawaf sampai suci' }
+      ]},
+      { id: 'mqe', icon: '🗣️', title: 'Setelah Niat', items: [
+        { id: 'mqe1', t: 'Mengucapkan talbiyah berulang-ulang (pria keras, wanita lirih) hingga mulai thawaf' },
+        { id: 'mqe2', t: 'Berselawat kepada Nabi ﷺ dan berdoa setelah talbiyah' },
+        { id: 'mqe3', t: 'Mulai menjaga larangan ihram (lihat panel Larangan Ihram)' },
+        { id: 'mqe4', t: 'Jalur udara: niat saat diumumkan sejajar miqat atau sesuai arahan ketua kloter, jangan terlewat' }
+      ]},
+      { id: 'mqf', icon: '🚌', title: 'Bila Berihram di Masjid Miqat (Bir Ali, Tan’im, dll.)', items: [
+        { id: 'mqf1', t: 'Mengganti pakaian ihram di kamar mandi / ruang ganti masjid' },
+        { id: 'mqf2', t: 'Shalat di masjid miqat lalu berniat sebelum bus meninggalkan masjid' },
+        { id: 'mqf3', t: 'Memastikan rombongan lengkap, membawa kartu identitas jamaah dan dokumen di sabuk/tas ihram' }
+      ]}
+    ];
+    PREP_CONFIG[4] = {
+      title: '🕋 Checklist Amalan di Miqat', groups: PREP_GROUPS_STEP4, open: 'mqa', info: 'miqat',
+      intro: 'Centang amalan yang sudah dilakukan di miqat. Penjelasan di atas tidak perlu dicentang.',
+      note: 'Ada perbedaan pendapat antarmazhab dalam beberapa rincian. Ikuti arahan pembimbing atau ketua rombongan Anda.',
+      done: 'Alhamdulillah, amalan di miqat sudah lengkap. Mulailah bertalbiyah!', todo: 'Lengkapi dulu amalan miqat sebelum melanjutkan ke thawaf.'
+    };
+    let mqTab = null;
+    const mqOpen = new Set(['arti', 'lok']);
+    function renderMiqatInfo() {
+      const host = document.getElementById('miqat-info-card');
+      if (!host) return;
+      const cfg = prepCfg();
+      const on = !!(cfg && cfg.info === 'miqat');
+      host.classList.toggle('hidden', !on);
+      if (!on) return;
+      if (!mqTab) mqTab = appState.route === 'madinah' ? 'madinah' : 'makkah';
+      const sec = (id, title, body) => `<details data-mq="${id}" class="hud-subcard rounded-xl" ${mqOpen.has(id) ? 'open' : ''}><summary class="cursor-pointer select-none px-3 py-2 text-[11px] font-bold text-purple-200">${title}</summary><div class="px-3 pb-2.5 text-[11px] leading-relaxed text-purple-100/90 space-y-1.5">${body}</div></details>`;
+      const ul = a => '<ul class="list-disc pl-4 space-y-0.5">' + a.map(x => `<li>${x}</li>`).join('') + '</ul>';
+      const L = MQ_LOK[mqTab];
+      const tabs = Object.keys(MQ_LOK).map(k => `<button type="button" data-mqtab="${k}" class="flex-1 px-1.5 py-1 rounded-lg text-[10px] font-bold border transition ${k === mqTab ? 'bg-purple-600/40 border-purple-400/60 text-white' : 'border-purple-400/20 text-purple-200/80 hover:bg-purple-500/15'}">${MQ_LOK[k].label}</button>`).join('');
+      const cards = L.items.map(([n, ar, m, t]) => `<div class="rounded-lg bg-black/25 border border-purple-400/15 p-2"><div class="font-bold text-amber-200">🕌 ${n}</div>${ar ? `<div class="text-[12px] text-purple-200/80" dir="rtl">${ar}</div>` : ''}<div class="text-[10px] text-emerald-300 mt-0.5">📍 ${m}</div><div class="mt-0.5">${t}</div></div>`).join('');
+      host.innerHTML =
+        `<div class="text-[10px] font-bold uppercase tracking-wider text-amber-300 px-1">📖 Penjelasan Miqat (tanpa centang)</div>` +
+        sec('arti', '📍 Arti Miqat',
+          `<p><b>Miqat</b> (الميقات) berasal dari kata <i>waqt</i>: ketetapan batas waktu atau tempat. Dalam manasik, miqat ialah batas yang ditetapkan syariat untuk memulai ihram haji atau umrah.</p>` +
+          ul(['<b>Miqat zamani</b> (waktu): haji pada Syawal, Dzulqa’dah, dan 10 hari pertama Dzulhijjah; umrah sepanjang tahun.', '<b>Miqat makani</b> (tempat): siapa pun yang berniat haji atau umrah wajib berihram sebelum melewatinya.']) +
+          `<p>Dasar: Ibnu Abbas r.a. meriwayatkan bahwa Nabi ﷺ menetapkan Dzulhulaifah bagi penduduk Madinah, Juhfah bagi Syam, Qarnul Manazil bagi Najd, dan Yalamlam bagi Yaman, berlaku pula bagi orang lain yang melewatinya (HR. Al-Bukhari & Muslim). Dzatu ‘Irq bagi Irak ditetapkan dalam riwayat lain.</p>` +
+          `<p>Bila terlanjur melewati miqat tanpa ihram: kembali ke miqat lalu berihram (gugur dam), atau membayar dam bila tidak kembali.</p>`) +
+        sec('lok', '🗺️ Masjid Miqat: pilih lokasi',
+          `<div class="flex gap-1">${tabs}</div><p>${L.intro}</p>${cards}<p class="text-[10px] text-amber-200/90">⚠️ ${L.warn}</p>`) +
+        sec('lrg', '🚫 Larangan Ihram',
+          ul(['<b>Semua jamaah</b>: memotong rambut/kuku, memakai wewangian, berburu atau membunuh hewan buruan darat, akad nikah atau meminang, bersetubuh dan pendahulunya, serta rafats, fusuq, dan jidal (QS. Al-Baqarah: 197).', '<b>Khusus pria</b>: menutup kepala, memakai pakaian berjahit yang membentuk badan, dan alas kaki yang menutup mata kaki.', '<b>Khusus wanita</b>: memakai cadar (niqab) dan sarung tangan.', 'Pelanggaran dikenai dam atau fidyah sesuai jenisnya; tanyakan kepada pembimbing.'])) +
+        sec('niat', '💭 Lafaz Niat: Diri Sendiri & Badal',
+          `<p><b>Untuk diri sendiri</b><br><span dir="rtl">لَبَّيْكَ اللَّهُمَّ عُمْرَةً</span><br><i>Labbaika Allāhumma ‘umratan</i>, atau <i>Nawaitul ‘umrata wa aḥramtu bihā lillāhi ta‘ālā</i>.</p>` +
+          `<p><b>Untuk orang lain (badal)</b><br><i>Labbaika Allāhumma ‘umratan ‘an … (nama)</i>, atau <i>Nawaitul ‘umrata ‘an … (nama) wa aḥramtu bihā lillāhi ta‘ālā</i> (NU Online, merujuk Busyral Karim).</p>` +
+          ul(['Pelaku badal sudah berumrah untuk dirinya sendiri.', 'Yang dibadalkan sudah wafat atau uzur permanen (lansia renta, sakit berat yang kecil harapan sembuh), menurut mazhab Syafi’i.', 'Satu orang per sekali umrah. Bila tidak berniat untuk orang lain, umrah jatuh untuk diri sendiri.']) +
+          `<p>Bila khawatir terhalang, disunnahkan menambah syarat <i>Allāhumma maḥillī ḥaitsu ḥabastanī</i> (HR. Al-Bukhari & Muslim, kisah Dhuba’ah binti Az-Zubair).</p>`) +
+        sec('src', '📚 Sumber Rujukan',
+          ul(['Kemenag RI, Tuntunan Manasik Haji & Umrah (dikutip NU Online, detik Hikmah)', 'Kementerian Haji & Umrah Saudi, <i>The Ihraam: A Guide for Pilgrims</i> (haj.gov.sa)', 'Risalah Haramain, <i>Sifat Umrah</i> (risala.prh.gov.sa)', 'Lembaga Raja Abdullah, <i>Amalan-amalan Umrah</i>', 'Fatwa MUI (1980/1981) tentang miqat jamaah Indonesia', 'HR. Al-Bukhari dan Muslim']));
+      host.querySelectorAll('[data-mqtab]').forEach(b => b.addEventListener('click', () => { mqTab = b.dataset.mqtab; renderMiqatInfo(); }));
+      host.querySelectorAll('details[data-mq]').forEach(d => d.addEventListener('toggle', () => { d.open ? mqOpen.add(d.dataset.mq) : mqOpen.delete(d.dataset.mq); }));
+    }
+    const PREP_STORAGE_KEY = 'umrohPrepChecklistV10';
+    const prepOpenGroups = new Set(['dok', 'imd', 'bdo', 'mqa']);
+    let prepChecked = (function () {
+      try { return JSON.parse(localStorage.getItem(PREP_STORAGE_KEY)) || {}; } catch (e) { return {}; }
+    })();
+    function savePrepChecked() {
+      try { localStorage.setItem(PREP_STORAGE_KEY, JSON.stringify(prepChecked)); } catch (e) { /* abaikan */ }
+    }
+    function prepCfg() { return PREP_CONFIG[appState.currentStep] || null; }
+    function prepVisibleItems(group) {
+      return group.items.filter(it => !it.g || (it.g === 'm') === (appState.gender === 'male'));
+    }
+    function prepCounts() {
+      let done = 0, total = 0;
+      const cfg = prepCfg();
+      if (cfg) cfg.groups.forEach(g => prepVisibleItems(g).forEach(it => { total++; if (prepChecked[it.id]) done++; }));
+      return { done, total };
+    }
+    function updatePrepProgressUI() {
+      const cfg = prepCfg();
+      if (!cfg) return;
+      const { done, total } = prepCounts();
+      const pct = total ? Math.round(done / total * 100) : 0;
+      const txt = document.getElementById('prep-progress-text');
+      const bar = document.getElementById('prep-progress-bar');
+      if (txt) txt.textContent = `${done}/${total}`;
+      if (bar) bar.style.width = pct + '%';
+      const pill = document.getElementById('mission-progress-pill');
+      if (pill) pill.textContent = `${done}/${total}`;
+      cfg.groups.forEach(g => {
+        const items = prepVisibleItems(g);
+        const c = items.filter(it => prepChecked[it.id]).length;
+        const el = document.getElementById('prep-count-' + g.id);
+        if (el) {
+          el.textContent = `${c}/${items.length}`;
+          el.className = 'text-[10px] font-bold px-1.5 py-0.5 rounded-full ' + (c === items.length && items.length ? 'bg-emerald-500/30 text-emerald-300' : 'bg-black/30 text-purple-200');
+        }
+      });
+    }
+    function renderPrepChecklist() {
+      const card = document.getElementById('prep-checklist-card');
+      if (!card) return;
+      renderMiqatInfo();
+      const cfg = prepCfg();
+      card.classList.toggle('hidden', !cfg);
+      const counter = document.getElementById('counter-card');
+      if (counter) counter.classList.toggle('hidden', !!cfg);
+      if (!cfg) return;
+
+      document.getElementById('prep-title').textContent = cfg.title;
+      document.getElementById('prep-intro').textContent = cfg.intro;
+      document.getElementById('prep-note').textContent = cfg.note;
+      const host = document.getElementById('prep-checklist-groups');
+      host.innerHTML = '';
+      cfg.groups.forEach(g => {
+        const det = document.createElement('details');
+        det.className = 'hud-subcard rounded-xl';
+        det.open = prepOpenGroups.has(g.id);
+        det.addEventListener('toggle', () => { det.open ? prepOpenGroups.add(g.id) : prepOpenGroups.delete(g.id); });
+        const sum = document.createElement('summary');
+        sum.className = 'cursor-pointer select-none flex items-center justify-between gap-2 px-3 py-2 text-[11px] font-bold text-purple-200';
+        sum.innerHTML = `<span>${g.icon} ${g.title}</span><span id="prep-count-${g.id}" class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-black/30 text-purple-200"></span>`;
+        det.appendChild(sum);
+        const list = document.createElement('div');
+        list.className = 'px-3 pb-2.5 space-y-1.5';
+        prepVisibleItems(g).forEach(it => {
+          const lab = document.createElement('label');
+          lab.className = 'flex items-start gap-2 text-[11px] leading-snug cursor-pointer';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = 'mt-0.5 w-3.5 h-3.5 shrink-0 accent-emerald-500 cursor-pointer';
+          cb.checked = !!prepChecked[it.id];
+          const span = document.createElement('span');
+          span.className = 'transition ' + (cb.checked ? 'line-through opacity-50' : 'text-purple-100/90');
+          span.textContent = it.t;
+          cb.addEventListener('change', () => {
+            if (cb.checked) prepChecked[it.id] = true; else delete prepChecked[it.id];
+            span.className = 'transition ' + (cb.checked ? 'line-through opacity-50' : 'text-purple-100/90');
+            savePrepChecked();
+            updatePrepProgressUI();
+            if (cb.checked) { try { playChime('lap'); } catch (e) {} }
+          });
+          lab.appendChild(cb); lab.appendChild(span);
+          list.appendChild(lab);
+        });
+        det.appendChild(list);
+        host.appendChild(det);
+      });
+      updatePrepProgressUI();
+    }
+    document.getElementById('btn-prep-reset').addEventListener('click', () => {
+      const cfg = prepCfg();
+      if (!cfg) return;
+      if (!confirm('Hapus semua centang pada checklist langkah ini?')) return;
+      cfg.groups.forEach(g => g.items.forEach(it => { delete prepChecked[it.id]; }));
+      savePrepChecked();
+      renderPrepChecklist();
+    });
+
     // =========================================================================
     // 5. UI RENDERING & EVENT HANDLERS
     // =========================================================================
@@ -6474,9 +6885,9 @@ window.__royalEnv={env:envRC,gates:GG};
       const lang = appState.lang;
       const curVal = appState.stepProgress[appState.currentStep] || 0;
 
-      const stepLabel = lang === 'en' ? `STEP ${step.id} OF 9` : (lang === 'ar' ? `الخطوة ${step.id} من 9` : `LANGKAH ${step.id} DARI 9`);
+      const stepLabel = lang === 'en' ? `STEP ${step.id} OF 10` : (lang === 'ar' ? `الخطوة ${step.id} من 10` : `LANGKAH ${step.id} DARI 10`);
       document.getElementById('top-step-badge').textContent = stepLabel;
-      document.getElementById('left-step-counter').textContent = `${step.id} / 9 LANGKAH`;
+      document.getElementById('left-step-counter').textContent = `${step.id} / 10 LANGKAH`;
       document.getElementById('right-step-subtitle').textContent = stepLabel;
       document.getElementById('right-step-title').textContent = step.name[lang] || step.name.id;
       document.getElementById('right-step-desc').textContent = step.desc;
@@ -6494,12 +6905,13 @@ window.__royalEnv={env:envRC,gates:GG};
       document.getElementById('mission-body-text').textContent = step.missionDesc;
       document.getElementById('step-primary-action-text').textContent = step.actionLabel;
       document.getElementById('tips-body-text').textContent = step.tips;
+      renderPrepChecklist();
 
       const inMasa = step.scene === 'masa';
       if (matafGroup && masaGroup) {
         matafGroup.visible = !inMasa;
         masaGroup.visible = inMasa;
-        if (guideGroup) guideGroup.visible = appState.showGuideLine && appState.currentStep === 4;
+        if (guideGroup) guideGroup.visible = appState.showGuideLine && appState.currentStep === 5;
         if (maqamPathGroup) maqamPathGroup.visible = appState.showGuideLine && appState.currentStep === 5;
       }
       document.getElementById('minimap-zone-label').textContent = inMasa ? "Mas'a • Shafa - Marwah" : "Mataf • Ka'bah";
@@ -6527,13 +6939,16 @@ window.__royalEnv={env:envRC,gates:GG};
           }">${isDone ? '✓' : s.id}</span>
           <span class="truncate">${s.name[lang] || s.name.id}</span>
         `;
-        btn.addEventListener('click', () => selectStep(s.id));
+        btn.addEventListener('click', () => {
+          selectStep(s.id);
+          if (PREP_CONFIG[s.id]) document.getElementById('right-sidebar').classList.remove('translate-x-[120%]');
+        });
         listEl.appendChild(btn);
       });
     }
 
     function selectStep(stepId) {
-      appState.currentStep = Math.max(1, Math.min(9, stepId));
+      appState.currentStep = Math.max(1, Math.min(10, stepId));
       appState.autoWalk = false;
       appState.useBelt = false;
       cameraOrbit.customTarget = null;
@@ -6549,7 +6964,7 @@ window.__royalEnv={env:envRC,gates:GG};
 
       const step = STEPS_DATA[appState.currentStep - 1];
       if (step.scene === 'masa') {
-        if (step.id === 7) {
+        if (step.id === 8) {
           // Tahalul di Marwah
           playerState.x = 5.6;
           playerState.z = -(HILL_STOP_Z - 2.6);
@@ -6561,7 +6976,7 @@ window.__royalEnv={env:envRC,gates:GG};
           playerState.ry = Math.PI; // menghadap jalur Sa'i menuju Marwah (-z), lajur kanan
           showRukunBanner('Dekati Shafa: Innash-shafa wal-marwata min sya\'aairillaah, abda\'u bimaa bada\'allaahu bih. Lalu naik, hadap Ka\'bah, takbir dan tahlil, kemudian menuju Marwah lewat lajur kanan. Jamaah sakit boleh naik eskalator mendatar di tengah.');
         }
-      } else if (step.id === 5) {
+      } else if (step.id === 6) {
         playerState.x = 10.5;
         playerState.z = 10.5;
         playerState.ry = Math.atan2(3.2, -10.45);
@@ -6766,7 +7181,7 @@ window.__royalEnv={env:envRC,gates:GG};
         showToast('Kamera kembali mengikuti langkah jamaah.');
       });
       document.getElementById('btn-view-maket').addEventListener('click', () => {
-        if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') selectStep(4);
+        if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') selectStep(5);
         cameraOrbit.customTarget = null;
         cameraOrbit.maketMode = true;
         cameraOrbit.panoramaMode = false;
@@ -6902,14 +7317,21 @@ window.__royalEnv={env:envRC,gates:GG};
       });
 
       document.getElementById('btn-step-primary-action').addEventListener('click', () => {
-        if (appState.currentStep === 5) {
+        if (appState.currentStep === 6) {
           openShalatModal();
-        } else if (appState.currentStep === 9) {
+        } else if (appState.currentStep === 10) {
           openCertificateView();
-        } else if (appState.currentStep === 4 || appState.currentStep === 6) {
+        } else if (appState.currentStep === 5 || appState.currentStep === 7) {
           appState.autoWalk = true;
           updateAutoWalkButtonUI();
           showToast('Karakter mulai berjalan mengikuti panduan hijau.');
+        } else if (PREP_CONFIG[appState.currentStep]) {
+          const pcfg = PREP_CONFIG[appState.currentStep];
+          const pc = prepCounts();
+          if (pc.done < pc.total) showToast(`Masih ${pc.total - pc.done} item belum dicentang. ${pcfg.todo}`);
+          else showToast(pcfg.done);
+          incrementCurrentStepCount();
+          showRukunBanner(STEPS_DATA[appState.currentStep - 1].tips);
         } else {
           incrementCurrentStepCount();
           showRukunBanner(STEPS_DATA[appState.currentStep - 1].tips);
@@ -6929,15 +7351,15 @@ window.__royalEnv={env:envRC,gates:GG};
         if (appState.shalatCursor < SHALAT_STAGES.length - 1) {
           appState.shalatCursor++;
           renderShalatModalState();
-          if (appState.shalatCursor === 6) appState.stepProgress[5] = 1;
-          if (appState.shalatCursor === 13) appState.stepProgress[5] = 2;
+          if (appState.shalatCursor === 6) appState.stepProgress[6] = 1;
+          if (appState.shalatCursor === 13) appState.stepProgress[6] = 2;
           renderAllUI();
         } else {
-          appState.stepProgress[5] = 2;
+          appState.stepProgress[6] = 2;
           playerState.pose = 'stand';
           document.getElementById('modal-shalat-sunnah').classList.add('hidden');
           showToast('Alhamdulillah, Shalat Sunnah Thawaf & minum Air Zamzam selesai!');
-          selectStep(6);
+          selectStep(7);
         }
       });
 
@@ -6968,11 +7390,13 @@ window.__royalEnv={env:envRC,gates:GG};
       });
       document.getElementById('btn-gender-male').addEventListener('click', e => {
         appState.gender = 'male';
+        renderPrepChecklist();
         e.currentTarget.className = 'py-2 rounded-xl font-bold bg-purple-600 text-white border border-purple-400';
         document.getElementById('btn-gender-female').className = 'py-2 rounded-xl font-bold hud-subcard hover:border-purple-400';
       });
       document.getElementById('btn-gender-female').addEventListener('click', e => {
         appState.gender = 'female';
+        renderPrepChecklist();
         e.currentTarget.className = 'py-2 rounded-xl font-bold bg-purple-600 text-white border border-purple-400';
         document.getElementById('btn-gender-male').className = 'py-2 rounded-xl font-bold hud-subcard hover:border-purple-400';
       });
@@ -7060,13 +7484,13 @@ window.__royalEnv={env:envRC,gates:GG};
           cameraOrbit.maketMode = false;
           cameraOrbit.customTarget = null;
           if (dest === 'masa_shafa') {
-            selectStep(6);
+            selectStep(7);
           } else {
-            if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') selectStep(4);
+            if (STEPS_DATA[appState.currentStep - 1].scene === 'masa') selectStep(5);
             if (dest === 'hajar_aswad') { playerState.x = 11.2; playerState.z = 11.2; }
             if (dest === 'rukun_yamani') { playerState.x = -11.2; playerState.z = 11.2; }
             if (dest === 'hijr_ismail') { playerState.x = 0; playerState.z = -12.5; }
-            if (dest === 'maqam_ibrahim') { selectStep(5); playerState.x = 13.7; playerState.z = 0.05; }
+            if (dest === 'maqam_ibrahim') { selectStep(6); playerState.x = 13.7; playerState.z = 0.05; }
             if (dest === 'bab_umrah') { playerState.x = -12; playerState.z = -24; }
             if (dest.indexOf('lvl_') === 0) teleportToLevel(Number(dest.slice(4)));
           }
@@ -7133,7 +7557,7 @@ window.__royalEnv={env:envRC,gates:GG};
           <div class="text-xs font-arabic text-amber-300">بسم الله الرحمن الرحيم</div>
           <div class="text-[10px] font-bold tracking-widest uppercase text-purple-300">SERTIFIKAT PENYELESAIAN MANASIK INTERAKTIF</div>
           <div class="text-xl font-extrabold text-white py-1 border-b border-purple-400/30">${appState.pilgrimName}</div>
-          <p class="text-[11px] text-purple-200">Telah menyelesaikan seluruh 9 tahapan simulasi manasik <strong>${appState.journeyType}</strong> (Thawaf, Shalat Sunnah Maqam Ibrahim, Sa'i Shafa-Marwah, dan Tahalul).</p>
+          <p class="text-[11px] text-purple-200">Telah menyelesaikan seluruh 10 tahapan simulasi manasik <strong>${appState.journeyType}</strong> (Thawaf, Shalat Sunnah Maqam Ibrahim, Sa'i Shafa-Marwah, dan Tahalul).</p>
           <p class="text-[11px] italic text-amber-200/90">"Dan sempurnakanlah ibadah haji dan umrah karena Allah." — QS. Al-Baqarah 2:196</p>
         </div>
       `);
@@ -7180,7 +7604,7 @@ window.__royalEnv={env:envRC,gates:GG};
       const closeInfo = () => document.getElementById('modal-info').classList.add('hidden');
       function view(cp, la, msg) {
         const st = STEPS_DATA[appState.currentStep - 1];
-        if (st && st.scene === 'masa') selectStep(4);
+        if (st && st.scene === 'masa') selectStep(5);
         appState.autoWalk = false; updateAutoWalkButtonUI();
         cameraOrbit.panoramaMode = false; cameraOrbit.maketMode = false;
         cameraOrbit.customTarget = { camPos: cp, lookAt: la };
@@ -7504,7 +7928,7 @@ window.__royalEnv={env:envRC,gates:GG};
       };
       function go(key) {
         const st = STEPS_DATA[appState.currentStep - 1];
-        if (st && st.scene === 'masa') selectStep(4);
+        if (st && st.scene === 'masa') selectStep(5);
         appState.autoWalk = false; updateAutoWalkButtonUI();
         if (cameraOrbit.firstPerson) document.getElementById('btn-view-eye').click();
         cameraOrbit.customTarget = null; cameraOrbit.maketMode = false; cameraOrbit.panoramaMode = false;
@@ -7711,9 +8135,9 @@ window.__royalEnv={env:envRC,gates:GG};
   }
   function hijrWalkable(x, z) { return inInterior(x, z) || inCorridor(x, z); }
   function locked() {
-    if (appState.currentStep !== 4) return false;
-    var p = appState.stepProgress[4] || 0;
-    return p > 0 && p < STEPS_DATA[3].targetCount;
+    if (appState.currentStep !== 5) return false;
+    var p = appState.stepProgress[5] || 0;
+    return p > 0 && p < STEPS_DATA[4].targetCount;
   }
 
   /* ---------- Izinkan karakter masuk lewat pintu (kecuali saat Thawaf berlangsung) ---------- */
